@@ -7,6 +7,13 @@ from app.api.endpoints import auth, public, bookings, admin, super_admin, notifi
 # Initialize tables
 Base.metadata.create_all(bind=engine)
 
+# Auto-seed database if empty (ensures demo accounts, movie, seats exist on deployed environments)
+try:
+    from seed import seed_database
+    seed_database()
+except Exception as e:
+    print(f"Seed initialization notice: {e}")
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
